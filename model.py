@@ -133,20 +133,8 @@ class pix2pix(object):
         #
         #######################################################################
         # save loss values each 100 step
-
         self.save_loss(loss_dir, step="step100", dloss=d_loss, gloss=g_loss)
-        # if not (os.path.isfile("dloss.txt") and os.path.isfile("gloss.txt")):
-        #     np.savetxt('dloss.txt', np.array([d_loss]))
-        #     np.savetxt('gloss.txt', np.array([g_loss]))
-        # else:
-        #     d_tmp = np.loadtxt("dloss.txt", np.float32) #float64?
-        #     g_tmp = np.loadtxt("gloss.txt", np.float32)
-        #
-        #     d_tmp = np.append(d_tmp, d_loss)
-        #     g_tmp = np.append(g_tmp, g_loss)
-        #
-        #     np.savetxt('dloss.txt', d_tmp, delimiter=',')
-        #     np.savetxt('gloss.txt', g_tmp, delimiter=',')
+
         #######################################################################
 
     def train(self, args):
@@ -216,20 +204,7 @@ class pix2pix(object):
 
         #######################################################################
                 # save step loss values
-
                 self.save_loss(args.loss_dir, step="step", dloss=(errD_fake+errD_real) , gloss=errG)
-                # if not (os.path.isfile("dloss_out.txt") and os.path.isfile("gloss_out.txt")):
-                #     np.savetxt('dloss_out.txt', np.array([errD_fake+errD_real]))
-                #     np.savetxt('gloss_out.txt', np.array([errG]))
-                # else:
-                #     d_tmp = np.loadtxt("dloss_out.txt", np.float32) #float64?
-                #     g_tmp = np.loadtxt("gloss_out.txt", np.float32)
-                #
-                #     d_tmp = np.append(d_tmp, errD_fake+errD_real)
-                #     g_tmp = np.append(g_tmp, errG)
-                #
-                #     np.savetxt('dloss_out.txt', d_tmp, delimiter=',')
-                #     np.savetxt('gloss_out.txt', g_tmp, delimiter=',')
 
         #######################################################################
 
