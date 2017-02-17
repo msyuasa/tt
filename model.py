@@ -410,8 +410,8 @@ class pix2pix(object):
                 d_tmp = np.loadtxt(dloss_path, np.float32) #float64?
                 g_tmp = np.loadtxt(gloss_path, np.float32)
 
-                d_tmp = np.append(d_tmp, d_loss)
-                g_tmp = np.append(g_tmp, g_loss)
+                d_tmp = np.append(d_tmp, dloss)
+                g_tmp = np.append(g_tmp, gloss)
 
                 np.savetxt(dloss_path, d_tmp, delimiter=',')
                 np.savetxt(gloss_path, g_tmp, delimiter=',')
