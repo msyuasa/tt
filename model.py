@@ -119,7 +119,7 @@ class pix2pix(object):
             sample_images = np.array(sample).astype(np.float32)
         return sample_images
 
-    def sample_model(self, sample_dir, epoch, idx):
+    def sample_model(self, sample_dir, epoch, idx, loss_dir):
         sample_images = self.load_random_samples()
         samples, d_loss, g_loss = self.sess.run(
             [self.fake_B_sample, self.d_loss, self.g_loss],
@@ -133,20 +133,8 @@ class pix2pix(object):
         #
         #######################################################################
         # save loss values each 100 step
+        self.save_loss(loss_dir, step="step100")
 
-        self.save_loss(args.loss_dir, step="step100")
-        # if not (os.path.isfile("dloss.txt") and os.path.isfile("gloss.txt")):
-        #     np.savetxt('dloss.txt', np.array([d_loss]))
-        #     np.savetxt('gloss.txt', np.array([g_loss]))
-        # else:
-        #     d_tmp = np.loadtxt("dloss.txt", np.float32) #float64?
-        #     g_tmp = np.loadtxt("gloss.txt", np.float32)
-        #
-        #     d_tmp = np.append(d_tmp, d_loss)
-        #     g_tmp = np.append(g_tmp, g_loss)
-        #
-        #     np.savetxt('dloss.txt', d_tmp, delimiter=',')
-        #     np.savetxt('gloss.txt', g_tmp, delimiter=',')
         #######################################################################
 
     def train(self, args):
@@ -216,25 +204,12 @@ class pix2pix(object):
 
         #######################################################################
                 # save step loss values
-
                 self.save_loss(args.loss_dir, step="step")
-                # if not (os.path.isfile("dloss_out.txt") and os.path.isfile("gloss_out.txt")):
-                #     np.savetxt('dloss_out.txt', np.array([errD_fake+errD_real]))
-                #     np.savetxt('gloss_out.txt', np.array([errG]))
-                # else:
-                #     d_tmp = np.loadtxt("dloss_out.txt", np.float32) #float64?
-                #     g_tmp = np.loadtxt("gloss_out.txt", np.float32)
-                #
-                #     d_tmp = np.append(d_tmp, errD_fake+errD_real)
-                #     g_tmp = np.append(g_tmp, errG)
-                #
-                #     np.savetxt('dloss_out.txt', d_tmp, delimiter=',')
-                #     np.savetxt('gloss_out.txt', g_tmp, delimiter=',')
 
         #######################################################################
 
                 if np.mod(counter, 100) == 1:
-                    self.sample_model(args.sample_dir, epoch, idx)
+                    self.sample_model(args.sample_dir, epoch, idx, args.loss_dir)
 
                 if np.mod(counter, 500) == 2:
                     self.save(args.checkpoint_dir, counter)
@@ -484,7 +459,7 @@ class pix2pix(object):
         sample = [load_data(sample_file, is_test=True) for sample_file in sample_files]
 
         if (self.is_grayscale):
-            sample_images = np.array(sample).astype(np.float32)[:, :, :, None]
+            sample_images = np.array(sample).sample_model(np.float32)[:, :, :, None]
         else:
             sample_images = np.array(sample).astype(np.float32)
 
